@@ -1,1 +1,53 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Facebook Bejelentkezés</title>
+</head>
+<body>
+  <button onclick="checkLoginState();">Facebook Login</button>
+
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '{your-app-id}',
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v15.0'
+      });
+
+      FB.getLoginStatus(function(response) {
+        statusChangeCallback(response);
+      });
+    };
+
+    (function(d, s, id){
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    function statusChangeCallback(response) {
+      console.log('Facebook login status: ', response);
+      if (response.status === 'connected') {
+        var accessToken = response.authResponse.accessToken;
+        var userID = response.authResponse.userID;
+      } else if (response.status === 'not_authorized') {
+        console.log('User is logged into Facebook but not your app.');
+      } else {
+        console.log('User is not logged into Facebook.');
+      }
+    }
+
+    function checkLoginState() {
+      FB.login(function(response) {
+        statusChangeCallback(response);
+      }, {scope: 'public_profile,email'});
+    }
+  </script>
+</body>
+</html>
 
